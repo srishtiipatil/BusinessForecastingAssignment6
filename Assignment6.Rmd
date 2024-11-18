@@ -1,0 +1,119 @@
+---
+title: "Assignment6"
+author: "Srishti Patil"
+date: "2024-11-17"
+output: html_document
+---
+
+
+
+
+1. Find an independent variable to predict your time-series (2 points)
+-This data set represents expenditures on different advertising mediums, including TV, radio, and newspapers, along with the corresponding sales generated. 
+-Here, we are taking Total Advertisement expenditure as the independent variable and sales as the dependent variable because advertising expenditure is generally considered a driving factor that influences sales.
+-This allows us to evaluate the impact of Total advertising on sales. 
+
+
+
+
+
+
+
+2. Perform regression (2 Points)
+```{r}
+library(readr)
+library(fpp)
+library(fpp2)
+library(forecast)
+library(readxl)
+library(ggplot2)
+
+
+
+file_path <- read_csv("C:/Users/Srishti/Desktop/FALL24/BF/Assignment6/advertising.csv")
+head(file_path)
+
+
+# Create a Scatter Plot
+plot(file_path$totalad,file_path$Sales,pch=19,col="blue")
+
+# Conduct a linear Model Regression
+lm1 <- lm(file_path$totalad~file_path$Sales)
+
+# Add Regression Line to the scatter plot
+plot(file_path$totalad,file_path$Sales,pch=19,col="blue")
+lines(file_path$Sales, lm1$fitted, col="black")
+
+## Visualizing the plots
+smoothScatter(file_path$totalad,file_path$Sales)
+abline(lm1,col="red",lwd=3)
+
+```
+
+
+
+
+
+
+
+3. Perform Model Acceptance Steps and show the interpretation of the model output (3 Points)
+
+```{r}
+
+summary(lm1)
+```
+
+Interpretation:
+-The regression is indicating that for every unit increase in Sales, the Total advertisement expenditure increases.
+-The p-value for the slope is less than 2e-16, which is far below 0.05, showing that Sales has a highly significant relationship with Total advertisement expenditure. The intercept is also statistically significant with a p-value of 1.13e-08.
+-The Multiple R-squared value is 0.8555, meaning 85.55% of the variation in Total Advertisement expenditure is explained by Sales, indicating a strong fit of the model.
+-The Residual Standard Error is 35.44, showing the average deviation between observed and predicted values of Total Advertisement is relatively small given the scale of the data.
+-The F-statistic is 1172, with a p-value of < 2e-16, indicating the overall model is highly significant, and Sales is a strong predictor of Total Advertisement expenditure.
+
+
+
+
+
+
+
+
+4. Perform Residual Analysis and explain the insights (3 Points)
+
+```{r}
+#residual analysis
+plot(lm1)
+hist(residuals(lm1), main="Histogram of Residuals", xlab="Residuals", col="pink")
+plot(lm1$fitted.values, residuals(lm1), main="Residuals vs Fitted", 
+     xlab="Fitted Values", ylab="Residuals", pch=19, col="blue")
+abline(h=0, col="red", lwd=2)
+```
+
+-The Q-Q plot suggests that the residuals follow a normal distribution reasonably well, as most points lie along the diagonal line, though deviations at the tails indicate the presence of potential outliers or heavy tails.
+-The histogram of residuals shows a roughly symmetric, bell-shaped distribution centered around zero, supporting the assumption of normality, although there is some spread in the tails that could hint at slight deviations.
+-The residuals vs. fitted values plot shows that residuals are scattered randomly around zero, with no visible patterns, suggesting that the residuals are independent and the variance of errors is constant.
+
+
+
+
+
+
+
+
+
+Conclusion:
+-We analysed Total Advertisement expenditure vs Sales data using Simple Liner regression.
+-Overall, the model seems to align well with the assumptions of linear regression.
+-We have observed a few residuals which may impact the models performance.
+
+
+
+
+
+
+
+
+
+
+
+
+
